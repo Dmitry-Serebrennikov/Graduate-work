@@ -1,7 +1,5 @@
 #TODO: формат файла hdf5 - прочитать с помощью библиотеки h5py
 
-import os
-
 #библиотеки для работы с данными
 import h5py
 import numpy as np
@@ -10,6 +8,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cf
+
+
+import os
+
 
 test_file = 'dtec_20_60_2017_148_-90_90_N_-180_180_E_6c18.h5'
 
@@ -62,10 +64,15 @@ with h5py.File(os.path.dirname(__file__) + '\\' + test_file, 'r') as hdf_file:
 
 #TODO: добавить блок с изображением северного полушария и в полярных координатах
 fig = plt.figure(figsize=(5, 5))
+#ax = plt.axes(projection=ccrs.NearsidePerspective(central_latitude=50,central_longitude=-20)) #central lat
 ax = plt.axes(projection=ccrs.Orthographic(0, 90))
 ax.coastlines()
 ax.gridlines(draw_labels=True, dms=True, color='gray', alpha=0.5, linestyle='--')
-#plt.scatter(lons, lats, c=ampltd_tec_vals, cmap='jet', marker=',', lw=0.5, s=2, transform=ccrs.PlateCarree())
+
+plt.scatter(lons, lats, c=ampltd_tec_vals, cmap='jet', marker=',', lw=0.5, s=2, transform=ccrs.PlateCarree())
+
+#ax.tricontourf(lons, lats, ampltd_tec_vals, cmap='jet')
+#ax.contourf(lons, lats, ampltd_tec_vals)
 plt.show()
 
-fig.savefig('polar_coords.png')
+#fig.savefig('test3.png')
