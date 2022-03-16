@@ -4,4 +4,8 @@
 
 **Polar system**
 
-![Result1](https://github.com/Dmitry-Serebrennikov/Graduate-work/blob/main/polar_coords.png)
+![Result2](https://github.com/Dmitry-Serebrennikov/Graduate-work/blob/main/polar_coords.png)
+
+**Northern hemisphere with tec-data example**
+
+![Result3](https://github.com/Dmitry-Serebrennikov/Graduate-work/blob/main/polar_coords_with_data.png)
