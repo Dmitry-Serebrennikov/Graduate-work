@@ -9,3 +9,11 @@
 **Northern hemisphere with tec-data example**
 
 ![Result3](https://github.com/Dmitry-Serebrennikov/Graduate-work/blob/main/polar_coords_with_data.png)
+
+**Old solution last update output examples. All**
+
+![Result4](https://github.com/Dmitry-Serebrennikov/Graduate-work/blob/main/all.png)
+
+**Old solution last update output examples. Oval**
+
+![Result5](https://github.com/Dmitry-Serebrennikov/Graduate-work/blob/main/oval.png)
