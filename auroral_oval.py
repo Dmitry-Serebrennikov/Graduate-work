@@ -149,6 +149,35 @@ def get_level(
         return get_otsu_level(rotis_img)
     return get_kmeans_level(rotis)
 
+def pixels2distance(a: np.ndarray or tuple) -> np.ndarray:
+    a = np.array(a)
+    return a * 2 * R / S
+
+
+def img2geo_coords(xy_img: np.ndarray or tuple):
+    xy_img = np.array(xy_img).reshape((-1, 2))
+    xy_img = pixels2distance(xy_img) # distances
+    
+    mlons = 180/np.pi * np.arctan2(xy_img[:, 0] - R, xy_img[:, 1] - R)
+    
+    mlats = (xy_img[:, 0]/R - 1)**2 + (xy_img[:, 1]/R - 1)**2
+    mlats = np.sqrt(mlats)
+    mlats = 180/np.pi * np.arccos(mlats)
+    
+    mlons, mlats = list(mlons), list(mlats)
+    if len(mlons) == 1:
+        mlons = mlons[0]
+    if len(mlats) == 1:
+        mlats = mlats[0]
+    
+    return mlons, mlats
+
+
+def distance(point: np.ndarray, documents: np.ndarray) -> np.ndarray:
+    dist = np.sum((documents - point)**2, axis=1)
+    dist = np.sqrt(dist)
+    dist = dist.reshape((-1, 1))
+    return dist
 
 if __name__ == '__main__':
 
@@ -224,7 +253,27 @@ if __name__ == '__main__':
         rotis_candidates_cvellipse = cv2.ellipse(rotis_candidates_cvellipse, ellipse, (255, 255, 0), 2)
 
         # блок для перевода из пикселей в MAG
-        ## в процессе
+        
+        # Обратное преобразование координат из пикселей в координаты
+        (xpc_img, ypc_img), (ap, bp), angle = ellipse
+
+        (lon_c, lat_c) = img2geo_coords((xpc_img, ypc_img))
+        (a, b) = pixels2distance((ap, bp))
+        lons_ellipse_points, lats_ellipse_points = img2geo_coords(candidates)
+
+        # Используя точки-писксели на которых строился эллипс, находим для каждой из них ближайшую точку из исходного массива координат mlons, mlats
+        ellipse_points = np.array([lons_ellipse_points, lats_ellipse_points]).T
+        coordinates = np.array([mlons, np.abs(mlats)]).T
+
+        knn_ids = []
+        for ep in ellipse_points:
+            d = distance(ep, coordinates)
+            knn_id = np.argsort(d, axis=0).T[0][:3]
+            knn_ids += list(knn_id)
+        knn_ids = list(set(knn_ids))
+
+        ellipse_mlons, ellipse_mlats = mlons[knn_ids], mlats[knn_ids]
+        ellipse_coordinates = np.array([ellipse_mlons, ellipse_mlats]).T
         
         # Сохраняем результаты в файлы
         file_name = file_path
@@ -235,7 +284,10 @@ if __name__ == '__main__':
             rotis_candidates_cvellipse
         )
         # также сохранить параметры эллипса в геомагнитных координатах - в процессе
-        
+        with open(f'Ellipse-{file_name}-{time}.txt', 'w+') as f:
+            f.write(f'Time (UTC): {time}\nCenter (long, lat): {(lon_c, lat_c)}\nSizes (km): {(a, b)}\nAngle (deg): {angle}')
+
+        np.savetxt(f'Ellipse points-{file_name}-{time}.txt', ellipse_coordinates, fmt='%f')
 
     except KeyboardInterrupt:
         sys.exit()
