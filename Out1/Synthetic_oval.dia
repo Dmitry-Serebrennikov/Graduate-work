@@ -1,0 +1,28 @@
+Out1\
+*Output path
+0.2		- low level
+0.5		- high level
+0.1		- mean noise level
+50.0		- Width of transaction zone
+86.		- Pole Latitude
+-147.	- Pole Longitude
+2200.	- oval radius (km)
+800.	- Oval_radius_polar
+400.	- oval_dif_in_radius
+0.	- lon of sunshine
+10		- Num of satellites
+50.		- data gap lon1
+170.		- data gap lon2
+
+
+
+===========
+xt = xc + a cos() cos(t) - b sin() sin(t);
+yt = yc + a sin() cos(t) + b cos() sin(t):
+
+раница зоны отстоит от магнитного полюса на 10Ч16∞, на ночной Ч 20Ч23∞
+The UV oval (as defined with the half value criterion) and particle oval have on average similar widths (7 deg),
+
+The auroras are located at higher magnetic latitudes (?75∞) on the dayside than on the nightside (?70∞); the oval has a typical radius of 1500Ц2000 km and a latitudinal width of some 200Ц1000 km 
+
+25
